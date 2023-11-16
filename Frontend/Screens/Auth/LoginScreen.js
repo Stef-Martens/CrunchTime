@@ -19,22 +19,13 @@ import OverallStyle from "../../styles/OverallStyle";
 import AuthStyle from "../../styles/AuthStyle";
 
 export default function LoginScreen({ navigation }) {
-  const [userEmail, setUserEmail] = useState("");
-  const [userPassword, setUserPassword] = useState("");
   const [errortext, setErrortext] = useState("");
 
   const passwordInputRef = createRef();
 
   const handleSubmitPress = () => {
     setErrortext("");
-    if (!userEmail) {
-      alert("Please fill Email");
-      return;
-    }
-    if (!userPassword) {
-      alert("Please fill Password");
-      return;
-    }
+
     /*let dataToSend = { email: userEmail, password: userPassword };
     let formBody = [];
     for (let key in dataToSend) {
@@ -75,51 +66,60 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <View>
-      <View style={OverallStyle.container}>
-        <KeyboardAvoidingView enabled>
-          <Image source={images.appa} style={AuthStyle.logo}></Image>
-          <TextInput
-            placeholder="Enter Email" //dummy@abc.com
-            placeholderTextColor="#8b9cb5"
-            autoCapitalize="none"
-            keyboardType="email-address"
-            returnKeyType="next"
-            underlineColorAndroid="#f000"
-            blurOnSubmit={false}
-            style={AuthStyle.inputfield}
-          />
+    <View style={AuthStyle.container}>
+      <KeyboardAvoidingView enabled>
+        <Image source={images.appa} style={AuthStyle.logo}></Image>
 
-          <TextInput
-            onChangeText={(UserPassword) => setUserPassword(UserPassword)}
-            placeholder="Enter Password" //12345
-            placeholderTextColor="#8b9cb5"
-            onSubmitEditing={Keyboard.dismiss}
-            blurOnSubmit={false}
-            secureTextEntry={true}
-            underlineColorAndroid="#f000"
-            returnKeyType="next"
-            style={AuthStyle.inputfield}
-          />
+        <TextInput
+          placeholder="Enter Email" //dummy@abc.com
+          placeholderTextColor="#8b9cb5"
+          autoCapitalize="none"
+          keyboardType="email-address"
+          returnKeyType="next"
+          underlineColorAndroid="#f000"
+          blurOnSubmit={false}
+          style={AuthStyle.inputfield}
+        />
 
-          {errortext != "" ? <Text>{errortext}</Text> : null}
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={handleSubmitPress}
-            style={AuthStyle.button}
-          >
-            <Text style={AuthStyle.buttonText}>LOGIN</Text>
+        <TextInput
+          placeholder="Enter Password" //12345
+          placeholderTextColor="#8b9cb5"
+          onSubmitEditing={Keyboard.dismiss}
+          blurOnSubmit={false}
+          secureTextEntry={true}
+          underlineColorAndroid="#f000"
+          returnKeyType="next"
+          style={AuthStyle.inputfield}
+        />
+
+        {errortext != "" ? <Text>{errortext}</Text> : null}
+
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={handleSubmitPress}
+          style={AuthStyle.buttonBig}
+        >
+          <Text style={AuthStyle.buttonText}>LOGIN</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => navigation.navigate("RegisterScreen")}
+          style={[AuthStyle.buttonBig, { backgroundColor: "#808080" }]}
+        >
+          <Text style={AuthStyle.buttonText}>New Here ? Register</Text>
+        </TouchableOpacity>
+
+        <View style={AuthStyle.socialButtons}>
+          <TouchableOpacity activeOpacity={0.5} style={AuthStyle.buttonSmall}>
+            <Text style={AuthStyle.buttonText}>GOOGLE</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => navigation.navigate("RegisterScreen")}
-            style={[AuthStyle.button, { backgroundColor: "#808080" }]}
-          >
-            <Text style={AuthStyle.buttonText}>New Here ? Register</Text>
+          <TouchableOpacity activeOpacity={0.5} style={AuthStyle.buttonSmall}>
+            <Text style={AuthStyle.buttonText}>NOG IET</Text>
           </TouchableOpacity>
-        </KeyboardAvoidingView>
-      </View>
+        </View>
+      </KeyboardAvoidingView>
     </View>
   );
 }
