@@ -18,51 +18,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import OverallStyle from "../../styles/OverallStyle";
 import AuthStyle from "../../styles/AuthStyle";
 
+import { loginUser } from "../../api";
+
 export default function LoginScreen({ navigation }) {
   const [errortext, setErrortext] = useState("");
 
-  const passwordInputRef = createRef();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleSubmitPress = () => {
-    setErrortext("");
-
-    /*let dataToSend = { email: userEmail, password: userPassword };
-    let formBody = [];
-    for (let key in dataToSend) {
-      let encodedKey = encodeURIComponent(key);
-      let encodedValue = encodeURIComponent(dataToSend[key]);
-      formBody.push(encodedKey + "=" + encodedValue);
-    }
-    formBody = formBody.join("&");
-
-    fetch("http://localhost:3000/api/user/login", {
-      method: "POST",
-      body: formBody,
-      headers: {
-        //Header Defination
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-      },
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        //Hide Loader
-        setLoading(false);
-        console.log(responseJson);
-        // If server response message same as Data Matched
-        if (responseJson.status === "success") {
-          AsyncStorage.setItem("user_id", responseJson.data.email);
-          console.log(responseJson.data.email);
-          navigation.replace("NavigationMain");
-        } else {
-          setErrortext(responseJson.msg);
-          console.log("Please check your email id or password");
-        }
-      })
-      .catch((error) => {
-        //Hide Loader
-        setLoading(false);
-        console.error(error);
-      });*/
+  const handleLogin = async () => {
+    await loginUser(email, password);
   };
 
   return (
@@ -71,24 +36,28 @@ export default function LoginScreen({ navigation }) {
         <Image source={images.appa} style={AuthStyle.logo}></Image>
 
         <TextInput
-          placeholder="Enter Email" //dummy@abc.com
+          placeholder="Enter Email"
           placeholderTextColor="#8b9cb5"
           autoCapitalize="none"
           keyboardType="email-address"
           returnKeyType="next"
           underlineColorAndroid="#f000"
+          value={email}
+          onChangeText={(text) => setEmail(text)}
           blurOnSubmit={false}
           style={AuthStyle.inputfield}
         />
 
         <TextInput
-          placeholder="Enter Password" //12345
+          placeholder="Enter Password"
           placeholderTextColor="#8b9cb5"
           onSubmitEditing={Keyboard.dismiss}
           blurOnSubmit={false}
           secureTextEntry={true}
           underlineColorAndroid="#f000"
           returnKeyType="next"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
           style={AuthStyle.inputfield}
         />
 
@@ -96,7 +65,7 @@ export default function LoginScreen({ navigation }) {
 
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={handleSubmitPress}
+          onPress={handleLogin}
           style={AuthStyle.buttonBig}
         >
           <Text style={AuthStyle.buttonText}>LOGIN</Text>

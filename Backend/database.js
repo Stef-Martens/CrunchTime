@@ -15,13 +15,16 @@ const pool = mysql
 
 export async function getUsers() {
   const [rows] = await pool.query("SELECT * FROM user");
-  console.log(rows);
   return rows;
 }
 
-export async function getUser(id) {
+export async function getUserOnID(id) {
   const [rows] = await pool.query("SELECT * FROM user WHERE user_id=?", [id]);
-  console.log(rows[0]);
+  return rows[0];
+}
+
+export async function getUserOnEmail(email) {
+  const [rows] = await pool.query("SELECT * FROM user WHERE email=?", [email]);
   return rows[0];
 }
 
@@ -32,5 +35,5 @@ export async function createUser(email, passwd, first_name, last_name) {
   );
 
   const id = result.insertId;
-  return getUser(id);
+  return getUserOnID(id);
 }
