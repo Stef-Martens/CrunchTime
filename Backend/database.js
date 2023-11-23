@@ -37,3 +37,38 @@ export async function createUser(email, passwd, first_name, last_name) {
   const id = result.insertId;
   return getUserOnID(id);
 }
+
+export async function addUserWithTokenToTable(user_id, refresh_token) {
+  if ((await checkIfUserHasToken(user_id)).length == 0) {
+    await pool.query(
+      "INSERT INTO refresh_token (user_id, refresh_token) VALUES (?,?)",
+      [user_id, refresh_token]
+    );
+  } else {
+    await pool.query(
+      "UPDATE refresh_token SET refresh_token = ? WHERE user_id=?",
+      [refresh_token, user_id]
+    );
+  }
+}
+
+export async function checkIfUserHasToken(user_id) {
+  const result = await pool.query(
+    "SELECT * FROM refresh_token WHERE user_id=?",
+    [user_id]
+  );
+  return result[0];
+}
+
+export async function checkValidityOfRefreshToken(user_id, refresh_token) {
+  const record = await checkIfUserHasToken(user_id);
+  if (record.refresh_token === refresh_token) {
+    return true;
+  }
+}
+
+export async function removeRefreshToken(user_id, token) {
+  if (checkValidityOfRefreshToken(user_id, token)) {
+    await pool.query("DELETE FROM refresh_token WHERE user_id=?", [user_id]);
+  }
+}

@@ -4,10 +4,9 @@
 //const BASE_URL = "https://192.168.0.0:8000";
 //const BASE_URL = "https://localhost:8000";
 //const BASE_URL = "https://172.20.10.3:8000";
-const BASE_URL = "https://fd36-81-82-240-0.ngrok-free.app";
+const BASE_URL = "https://f64c-81-82-240-0.ngrok-free.app";
 
 export const loginUser = async (email, password) => {
-  console.log("start");
   try {
     const response = await fetch(`${BASE_URL}/users/login`, {
       method: "POST",
@@ -20,10 +19,10 @@ export const loginUser = async (email, password) => {
         password,
       }),
     });
-    console.log("halfweg");
 
     if (response.ok) {
-      console.log("Login successful");
+      const data = await response.json();
+      console.log("Data from backend:", data);
     } else {
       console.error("Login failed");
     }
