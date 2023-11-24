@@ -65,7 +65,9 @@ export default function RegisterScreen({ navigation }) {
 
     try {
       const result = await registerUser(first_name, last_name, email, password);
-      if (result.status == 201) navigation.navigate("LoginScreen");
+      if (result.status == 201) {
+        navigation.navigate("LoginScreen");
+      }
       if (result.status == 409) {
         setErrortext("User with this email already exists");
       }

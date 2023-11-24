@@ -12,6 +12,7 @@ import bcrypt, { hash } from "bcrypt";
 const app = express();
 import jwt from "jsonwebtoken";
 import validateAccessToken from "./middleware.js";
+import nodemailer from "nodemailer";
 
 app.use(express.json());
 
@@ -70,6 +71,10 @@ app.post("/users/login", async (req, res) => {
   );
 
   const user = await getUserOnEmail(req.body.email);
+
+  if (user.verified_email == 0) {
+    return res.status(403).send("Email not verified");
+  }
 
   if (user == null) {
     return res.status(400).send("Cannot find user");

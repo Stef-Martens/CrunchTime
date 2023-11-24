@@ -1,4 +1,4 @@
-const BASE_URL = "https://305d-84-197-92-73.ngrok-free.app";
+const BASE_URL = "https://297b-84-197-92-73.ngrok-free.app";
 
 //  LOGIN
 export const loginUser = async (email, password) => {
@@ -18,8 +18,8 @@ export const loginUser = async (email, password) => {
     if (response.ok) {
       const data = await response.json();
       return data;
-    } else {
-      console.error("Login failed");
+    } else if (response.status == 403) {
+      return 403;
     }
   } catch (error) {
     console.error("Error during login:", error.message);

@@ -60,12 +60,14 @@ export default function LoginScreen({ navigation }) {
     try {
       setErrortext("");
       const result = await loginUser(email, password);
-      if (result) {
+      if (result.ok) {
         await AsyncStorage.setItem("access_token", result.accessToken);
         await AsyncStorage.setItem("refresh_token", result.refreshToken);
         await AsyncStorage.setItem("user_id", result.user_id.toString());
 
         navigation.replace("NavigationMain");
+      } else if (result === 403) {
+        setErrortext("Verify your email first");
       } else {
         setErrortext("Something went wrong");
       }
