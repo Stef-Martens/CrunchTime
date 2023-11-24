@@ -1,4 +1,4 @@
-const BASE_URL = "https://9a5c-81-82-240-0.ngrok-free.app";
+const BASE_URL = "https://305d-84-197-92-73.ngrok-free.app";
 
 //  LOGIN
 export const loginUser = async (email, password) => {

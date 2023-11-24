@@ -34,6 +34,8 @@ app.post("/users/register", async (req, res) => {
   const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
   const { email, password, first_name, last_name } = req.body;
+  const checkIfUserExists = await getUserOnEmail(email);
+  if (checkIfUserExists) return res.sendStatus(409);
   const user = await createUser(email, hashedPassword, first_name, last_name);
   res.status(201).send(user);
 });

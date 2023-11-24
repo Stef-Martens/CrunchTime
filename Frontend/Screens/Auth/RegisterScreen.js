@@ -17,8 +17,8 @@ import { images, COLORS, FONT, SIZES } from "../../constants/index";
 import AuthStyle from "../../styles/AuthStyle";
 import OverallStyle from "../../styles/OverallStyle";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { registerUser } from "../../api";
+import { checkifpasswordisvalid, checkifemailisvalid } from "./LoginScreen";
 
 export default function RegisterScreen({ navigation }) {
   const [first_name, setFirstName] = useState("");
@@ -26,12 +26,51 @@ export default function RegisterScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [errortext, setErrortext] = useState("");
+
+  function checkifpasswordisvalid(password) {
+    if (password.length < 6 || !/\W/.test(password)) {
+      setErrortext(
+        "Password must be at least 6 characters long and contain at least one special character."
+      );
+      return false;
+    }
+    return true;
+  }
+
+  function checkifemailisvalid(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setErrortext("Please enter a valid email address.");
+      return false;
+    }
+    return true;
+  }
+
   const handleRegister = async () => {
-    const result = await registerUser(first_name, last_name, email, password);
-    if (result.ok) {
-      navigation.navigate("LoginScreen");
-    } else {
-      console.error(result);
+    // error handling
+    if (!first_name || !last_name || !email || !password) {
+      setErrortext("Please fill in all fields");
+      return;
+    }
+
+    if (first_name.length > 40 || last_name.length > 40) {
+      setErrortext("Give valid name");
+      return;
+    }
+
+    if (!checkifemailisvalid(email) || !checkifpasswordisvalid(password)) {
+      return;
+    }
+
+    try {
+      const result = await registerUser(first_name, last_name, email, password);
+      if (result.status == 201) navigation.navigate("LoginScreen");
+      if (result.status == 409) {
+        setErrortext("User with this email already exists");
+      }
+    } catch (err) {
+      setErrortext("Something went wrong");
     }
   };
 
@@ -85,6 +124,8 @@ export default function RegisterScreen({ navigation }) {
           onChangeText={(text) => setPassword(text)}
           style={AuthStyle.inputfield}
         />
+
+        {errortext ? <Text>{errortext}</Text> : null}
 
         <TouchableOpacity
           activeOpacity={0.5}

@@ -32,10 +32,8 @@ const SplashScreen = ({ navigation }) => {
               access_token
             );
             if (hasValidAccessToken) {
-              console.log("een");
               navigation.replace("NavigationMain");
             } else {
-              console.log("twee");
               const newToken = await renewToken(user_id, refresh_token);
 
               await AsyncStorage.setItem("access_token", newToken);
