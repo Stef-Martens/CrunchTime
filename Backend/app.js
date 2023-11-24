@@ -17,12 +17,7 @@ app.get("/users", async (req, res) => {
   res.send(users);
 });
 
-// USER ON ID
-app.get("/users/:id", async (req, res) => {
-  const id = req.params.id;
-  const users = await getUserOnID(id);
-  res.send(users);
-});
+
 
 // ERROR HANDLING
 app.use((err, req, res, next) => {

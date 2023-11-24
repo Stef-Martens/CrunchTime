@@ -10,7 +10,7 @@ import {
   KeyboardAvoidingView,
   Button,
 } from "react-native";
-import React, { useState, createRef } from "react";
+import React, { useState, createRef, useEffect } from "react";
 
 import { images, COLORS, FONT, SIZES } from "../../constants/index";
 
@@ -27,14 +27,20 @@ export default function LoginScreen({ navigation }) {
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-    await loginUser(email, password);
+    const result = await loginUser(email, password);
+    if (result) {
+      await AsyncStorage.setItem("access_token", result.accessToken);
+      await AsyncStorage.setItem("refresh_token", result.refreshToken);
+      await AsyncStorage.setItem("user_id", result.user_id.toString());
+
+      navigation.replace("NavigationMain");
+    }
   };
 
   return (
     <View style={AuthStyle.container}>
       <KeyboardAvoidingView enabled>
         <Image source={images.appa} style={AuthStyle.logo}></Image>
-
         <TextInput
           placeholder="Enter Email"
           placeholderTextColor="#8b9cb5"

@@ -1,11 +1,6 @@
-//const BASE_URL = "https://10.1.11.1:8000";
-//const BASE_URL = "https://10.1.11.234:8000";
-//const BASE_URL = "https://127.0.0.1:8000";
-//const BASE_URL = "https://192.168.0.0:8000";
-//const BASE_URL = "https://localhost:8000";
-//const BASE_URL = "https://172.20.10.3:8000";
-const BASE_URL = "https://f64c-81-82-240-0.ngrok-free.app";
+const BASE_URL = "https://9a5c-81-82-240-0.ngrok-free.app";
 
+//  LOGIN
 export const loginUser = async (email, password) => {
   try {
     const response = await fetch(`${BASE_URL}/users/login`, {
@@ -22,7 +17,7 @@ export const loginUser = async (email, password) => {
 
     if (response.ok) {
       const data = await response.json();
-      console.log("Data from backend:", data);
+      return data;
     } else {
       console.error("Login failed");
     }
@@ -31,7 +26,8 @@ export const loginUser = async (email, password) => {
   }
 };
 
-export const registerUser = async (email, password) => {
+//  REGISTER
+export const registerUser = async (first_name, last_name, email, password) => {
   try {
     const response = await fetch(`${BASE_URL}/users/register`, {
       method: "POST",
@@ -39,16 +35,78 @@ export const registerUser = async (email, password) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        first_name,
+        last_name,
         email,
         password,
       }),
     });
 
+    return response;
+  } catch (error) {
+    console.error("Error during registration:", error);
+  }
+};
+
+//  LOGOUT
+export const logoutUser = async (user_id, refresh_token) => {
+  try {
+    const response = await fetch(`${BASE_URL}/users/logout`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_id,
+        refresh_token,
+      }),
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error during registration:", error);
+  }
+};
+
+//  REQUEST NEW TOKEN
+export const renewToken = async (user_id, refresh_token) => {
+  try {
+    const response = await fetch(`${BASE_URL}/users/token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_id,
+        refresh_token,
+      }),
+    });
+
+    const json = await response.json();
+    return json.access_token;
+  } catch (error) {
+    console.error("Error during registration: ", error);
+  }
+};
+
+//  GET USER INFORMATION
+export const getUserInformation = async (user_id, access_token) => {
+  try {
+    const response = await fetch(`${BASE_URL}/users/${user_id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+
     if (response.ok) {
-      console.log("Registration successful");
-    } else {
-      console.error("Registration failed");
-    }
+      return true;
+    } else return false;
+
+    return data;
   } catch (error) {
     console.error("Error during registration:", error);
   }
