@@ -1,4 +1,5 @@
-const BASE_URL = "https://297b-84-197-92-73.ngrok-free.app";
+// Set EXPO_PUBLIC_API_URL in Frontend/.env (e.g. your local IP or an ngrok URL)
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? "http://localhost:9090";
 
 //  LOGIN
 export const loginUser = async (email, password) => {

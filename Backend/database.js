@@ -14,7 +14,9 @@ const pool = mysql
   .promise();
 
 export async function getUsers() {
-  const [rows] = await pool.query("SELECT * FROM user");
+  const [rows] = await pool.query(
+    "SELECT user_id, email, first_name, last_name FROM user"
+  );
   return rows;
 }
 
